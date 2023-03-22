@@ -31,9 +31,11 @@ declare global {
 const addressParagraphStyle: CSSProperties = {
   position: "absolute",
   bottom: "0%",
-  fontSize: "3rem",
+  fontSize: "2rem",
   width: "100%",
   textAlign: "center",
+  textOverflow:'ellipsis',
+  overflow:'hidden'
 };
 const balanceStypeProp: CSSProperties = {
   fontSize: "1.6rem",
