@@ -43,11 +43,7 @@
   display: block;
   text-align: center;
 }
-.imageContainer {
-  padding: 0;
-  width: 440px;
-  height: 60px;
-}
+
 .logoImage {
   width: 100%;
   height: 100%;

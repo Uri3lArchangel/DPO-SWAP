@@ -27,6 +27,12 @@ const addressParagraphStyle: CSSProperties = {
   width: "100%",
   textAlign: "center",
 };
+const balanceStypeProp:CSSProperties = {
+fontSize:'1.6rem',
+margin:'0.3em',
+width:'fit-content'
+}
+
 interface PROPS{
   apikey:string
 }
@@ -34,6 +40,13 @@ interface PROPS{
 function Home({apikey}:PROPS) {
   const [fromToken,setFromToken] = useState("")
   const[toToken,setToToken] =useState("")
+  const [value,setValue] = useState("")
+  const [valueExchanged,setValueExchanged]=useState("")
+  const [valueExchangedDecimals,setValueEXchangedDecimals]=useState(1E18)
+  const [to,setTo]=useState("")
+  const [txData,setTxData]=useState("")
+ const [fromBalance,setFromBalance]=useState('')
+  const [toBalance,setToBalance]=useState('')
   const [opened, setStateOpened] = useState<boolean>();
   const [openedWalletWindw, setStateOpenedWalletWindow] =useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
@@ -55,7 +68,16 @@ function Home({apikey}:PROPS) {
     let id = e.currentTarget.id;
     let element = document.querySelector(`#${id} p`) as HTMLParagraphElement;
     tokenName = element.innerHTML;
-    console.log(selectedButton);
+    if(id == 'from' ){
+      switch (tokenName) {
+        case "Ethereum":
+          
+          break;
+      
+        default:
+          break;
+      }
+    }
     if (tokenName != "" && selectedButton != undefined) {
       selectedButton.innerHTML = tokenName;
     }
@@ -136,15 +158,17 @@ useEffect(()=>{
             {false ? <button>Max</button> : <></>}{" "}
             <button onClick={open_close}>ChooseToken</button>
           </div>
+          <p style={balanceStypeProp}>balance: {fromBalance}</p>
           <div>
             <input
               type="text"
               className={hm.input}
               placeholder="Enter Amount"
             />
-            {/* {false ? <button>Max</button> : <></>} */}
+            {false ? <button>Max</button> : <></>}
             <button onClick={open_close}>ChooseToken</button>
           </div>
+          <p style={balanceStypeProp}>balance: {toBalance}</p>
           {address != '' ? ( errorObjectTemplate.errorID == 0?
             <button>Swap</button>:<button>{errorObjectTemplate.reason}</button>
           ) : (

@@ -11,7 +11,7 @@ function TopBar({mode}:any) {
       </div>
       <div className={mode.lowerContainer}>
         <div className={mode.imageContainer}>
-        <Image alt='logo' src={logo} className={mode.logoImage} />
+        <Image alt='logo' src={logo} />
         </div>
         <span>SWAP</span>
       </div>
