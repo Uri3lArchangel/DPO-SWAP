@@ -233,6 +233,9 @@
 box-shadow: 1px 1px 5px #00000040;
 }
 @media screen and (max-width: 576px) {
+  .main{
+    overflow-y: scroll;
+  }
   .walletConnectContainer{
     width: 100%;
     padding: 0.5em;
@@ -254,11 +257,15 @@ box-shadow: 1px 1px 5px #00000040;
   }
   .swapContainer {
     width: 100%;
+    position: absolute;
+    top: 10%;
     padding: 2em 0.8em;
+    margin-top: 0;
   }
   .swapContainer > div {
     width: 100%;
     padding: 0 1em;
+    height: 50px;
   }
   .swapContainer input {
     width: 80%;
