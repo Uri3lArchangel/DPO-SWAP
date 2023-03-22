@@ -85,10 +85,11 @@ useEffect(()=>{
         window.localStorage.clear()
         router.reload()
       }
+      router.reload()
     });
     window.ethereum.on('chainChanged',()=>{
       router.reload()
-    }),[address]
+    }),[]
   }
   
 
@@ -141,7 +142,7 @@ useEffect(()=>{
               className={hm.input}
               placeholder="Enter Amount"
             />
-            {false ? <button>Max</button> : <></>}
+            {/* {false ? <button>Max</button> : <></>} */}
             <button onClick={open_close}>ChooseToken</button>
           </div>
           {address != '' ? ( errorObjectTemplate.errorID == 0?

@@ -1,7 +1,6 @@
 import Web3 from 'web3'
 const arbitriumMainnetChainID = 42161
-let web3 = new Web3(Web3.givenProvider)
-
+let web3:Web3
 
 export let errorObjectTemplate={
     state:'',
@@ -10,6 +9,7 @@ export let errorObjectTemplate={
     errorID:0
 }
 const chainConfirm=async()=>{
+    try{
     let chainID = await web3.eth.getChainId()
     if(chainID != arbitriumMainnetChainID){
         errorObjectTemplate.state='Failed' 
@@ -18,18 +18,22 @@ const chainConfirm=async()=>{
         errorObjectTemplate.errorID =-1
         alert(errorObjectTemplate.reason + errorObjectTemplate.solution)
     }
+}catch(error){
+    console.error(error)
+}
 }
 const checkProvider=()=>{
-    if(!web3){
+    if(!window.ethereum){
         errorObjectTemplate.errorID=-2
         errorObjectTemplate.reason = 'Metamask not found'
         errorObjectTemplate.solution = 'Pease install metamask'
         errorObjectTemplate.state='Failed'
+    }else{
+        web3=new Web3(window.ethereum)
     }
 }
 
-checkProvider()
-chainConfirm()
+
 const handleResponse=(a:string,ret:boolean)=>{
 alert(a)
 
@@ -39,6 +43,9 @@ if(ret){
 }
 
 export async function metamaskConnect(){
+    checkProvider()
+    chainConfirm()
+
 if(errorObjectTemplate.errorID === -1){
     handleResponse(errorObjectTemplate.reason+errorObjectTemplate.solution,false)
 }else if(errorObjectTemplate.errorID == -2){
