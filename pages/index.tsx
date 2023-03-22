@@ -122,7 +122,6 @@ function Home({ apikey }: PROPS) {
     open_close(e);
   }
   function walletWindow() {
-    setStateOpened(false);
     setStateOpenedWalletWindow(OPEN_CLOSE());
     if (!openedWalletWindw) {
       blur();
