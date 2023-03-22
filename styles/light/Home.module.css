@@ -238,6 +238,7 @@ box-shadow: 1px 1px 5px #00000040;
   }
   .walletConnectContainer{
     width: 40%;
+    top: 35%;
     padding: 1.6em 1.4em;
     
   }
