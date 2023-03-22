@@ -237,14 +237,14 @@ box-shadow: 1px 1px 5px #00000040;
     overflow-y: scroll;
   }
   .walletConnectContainer{
-    width: 100%;
-    padding: 0.5em;
+    width: 40%;
+    padding: 1.6em 1.4em;
     
   }
   .walletConnectContainer li{
     font-size: 1.6rem;
     text-align: center;
-    margin:1em 
+    margin:0em 
   }
     .dropDown{
         width: 100%;
