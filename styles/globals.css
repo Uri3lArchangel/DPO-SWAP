@@ -8,7 +8,10 @@
   --topBar_bg_color:#607d8b;
   --sideBar_text_light:#ffffff;
   --swapContainer_bg:#ffffffef;
-  --swapLinearThemeGradient:linear-gradient(to right,black,10%,green,40%,yellowgreen);
+  --swapLinearThemeGradient:linear-gradient(to right,black,10%,green,40%,#00ff00);
+}a{
+  text-decoration: none;
+  color: white;
 }
 @font-face {
   font-family: boiled;
@@ -18,3 +21,4 @@
   font-family: girlfriend;
   src: url(../src/fonts/Girlfriend.ttf);
 }
+

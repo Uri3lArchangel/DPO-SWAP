@@ -8,6 +8,8 @@ interface PROPS {
   select: MouseEventHandler<HTMLLIElement>
 }
 
+let a ='abc'
+
 function Dropdown({ hm, close,select }: PROPS) {
   return (
     <div className={hm.dropDown}>
@@ -19,7 +21,6 @@ function Dropdown({ hm, close,select }: PROPS) {
         id="TokenAddress"
         placeholder="Input Token Address or Search Existing Tokens"
       />
-      <hr />
       <ul className={hm.dropDownTokenList}>
         <li id="eth" onClick={select}>
           <Image src={ethLogo} alt="eth" /> <p>Ethereum</p>

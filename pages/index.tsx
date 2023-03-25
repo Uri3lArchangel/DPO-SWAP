@@ -19,6 +19,7 @@ import {
 import { fetchBalances } from "../src/web3/swapFunction";
 import hm_l from "/styles/light/Home.module.css";
 import axios, { AxiosError } from "axios";
+import Typewriter from "../src/components/TypeWritter";
 
 let hm = hm_l;
 
@@ -35,10 +36,12 @@ const addressParagraphStyle: CSSProperties = {
   width: "100%",
   textAlign: "center",
   textOverflow:'ellipsis',
-  overflow:'hidden'
+  overflow:'hidden', 
+   color:'white'
+
 };
 const balanceStypeProp: CSSProperties = {
-  fontSize: "1.6rem",
+  fontSize: "2rem",
   margin: "0.3em",
   width: "fit-content",
 };
@@ -199,8 +202,7 @@ function Home({ apikey }: PROPS) {
         }}
       >
         <div className={hm.swapContainer}>
-          <h1>DPO SWAP</h1>
-          <hr />
+          <Typewriter text="DPO SWAP" />
           <div>
             <input
               type="text"
@@ -252,6 +254,7 @@ function Home({ apikey }: PROPS) {
       ) : (
         <></>
       )}
+      
     </RootLayout>
   );
 }

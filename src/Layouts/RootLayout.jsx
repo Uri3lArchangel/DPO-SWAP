@@ -17,7 +17,7 @@ function RootLayout({children}) {
     </Head>
     <TopBar mode={hm} />
     <main>{children}</main>
-    <Footer />
+    <Footer mode={hm} />
     </>
   )
 }
