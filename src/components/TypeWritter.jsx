@@ -1,11 +1,8 @@
 import React from 'react';
 import Typewriter from 'typewriter-effect';
 
-interface props{
-    text:string
-}
 
-function TypeWritter({text}:props) {
+function TypeWritter({text}) {
   return (
     <h1>
     <Typewriter
