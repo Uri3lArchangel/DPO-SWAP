@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 const arbitriumMainnetChainID = 42161
-let web3:Web3
+export let web3:Web3
 
 export let errorObjectTemplate={
     state:'',

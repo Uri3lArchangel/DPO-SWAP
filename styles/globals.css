@@ -21,4 +21,8 @@
   font-family: girlfriend;
   src: url(../src/fonts/Girlfriend.ttf);
 }
+@font-face {
+  font-family: poppins;
+  src: url(../src/fonts/Poppins-SemiBold.ttf);
+}
 

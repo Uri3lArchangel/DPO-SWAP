@@ -14,20 +14,16 @@ import { OPEN_CLOSE } from "../src/functions/selectToken";
 import RootLayout from "../src/Layouts/RootLayout";
 import {
   errorObjectTemplate,
-  metamaskConnect,
+  metamaskConnect, web3
 } from "../src/web3/metamaskConect";
 import { fetchBalances } from "../src/web3/swapFunction";
 import hm_l from "/styles/light/Home.module.css";
 import axios, { AxiosError } from "axios";
 import Typewriter from "../src/components/TypeWritter";
+import { useSendTransaction, usePrepareSendTransaction } from "wagmi";
 
 let hm = hm_l;
 
-declare global {
-  interface Window {
-    ethereum?: any;
-  }
-}
 
 const addressParagraphStyle: CSSProperties = {
   position: "absolute",
@@ -35,10 +31,9 @@ const addressParagraphStyle: CSSProperties = {
   fontSize: "2rem",
   width: "100%",
   textAlign: "center",
-  textOverflow:'ellipsis',
-  overflow:'hidden', 
-   color:'white'
-
+  textOverflow: "ellipsis",
+  overflow: "hidden",
+  color: "white",
 };
 const balanceStypeProp: CSSProperties = {
   fontSize: "2rem",
@@ -51,12 +46,14 @@ interface PROPS {
 }
 
 function Home({ apikey }: PROPS) {
+  const router = useRouter();
+
   let fromToken: string = "";
-  const [fromTokenState, setFromToken] = useState<string>();
+  const [fromTokenState, setFromToken] = useState<string>("");
   let toToken: string = "";
   const [toTokenState, setToToken] = useState("");
   const [value, setValue] = useState<string>();
-  const [valueExchanged, setValueExchanged] = useState("");
+  const [valueExchanged, setValueExchanged] = useState<string>("");
   const [valueExchangedDecimals, setValueEXchangedDecimals] = useState(1e18);
   const [to, setTo] = useState("");
   const [txData, setTxData] = useState("");
@@ -69,7 +66,28 @@ function Home({ apikey }: PROPS) {
   const [selectedTokenName, setSelectedTokenName] = useState("");
   let tokenName: string = "";
   const [id, setId] = useState("");
-  const router = useRouter();
+
+  const txObject={
+    from:address,
+    to:to,
+    value:String(value),
+    data:String(txData),
+  }
+
+  const confirmSwap=async()=>{
+    try{
+      if(web3){
+        // console.log(await web3.eth.getAccounts())
+    const sendTx = await web3.eth.sendTransaction(txObject)
+    console.log(sendTx)
+      }
+      else{
+        return
+      }
+  }catch(err:any){
+    alert(err.message)
+  }
+  }
 
   function open_close(e: React.MouseEvent<HTMLElement>) {
     if (!opened) {
@@ -91,7 +109,6 @@ function Home({ apikey }: PROPS) {
             break;
         }
         setFromToken(fromToken);
-
       } else if (id == "to") {
         switch (tokenName) {
           case "Ethereum":
@@ -105,10 +122,8 @@ function Home({ apikey }: PROPS) {
             break;
         }
         setToToken(toToken);
-
       }
     }
-
 
     setStateOpened(OPEN_CLOSE());
   }
@@ -133,27 +148,42 @@ function Home({ apikey }: PROPS) {
     }
   }
 
-  function changeValue(e: ChangeEvent<HTMLInputElement>) {
+  async function changeValue(e: ChangeEvent<HTMLInputElement>) {
     let value = parseFloat(e.currentTarget.value);
     setValue(`${value * 1e18}`);
     setValueExchanged("");
+    console.log(value);
   }
   async function getInchSwap() {
-   try{
-    if(address != '' && fromTokenState != '' && toTokenState != '' ){
-    const tx =await axios.get(`https://api.1inch.io/v5.0/42161/swap?fromTokenAddress=${fromTokenState}&toTokenAddress=${toTokenState}&amount=${value}&fromAddress=${address}&slippage=1
-    `)
-    setTo(tx.data.tx.to)
-    setTxData(tx.data.tx.data)
-    setValueEXchangedDecimals(Number(`1E${tx.data.toToken.decimals}`))
-    setValueExchanged(tx.data.toTokenAmount)
-    }else{
-      alert('select a token to convert from and to convert to')
-    }
-   }catch(err:any){
-    alert(err.response.data.description)
+    try {
+      if (fromTokenState != "" && toTokenState != "") {
+        console.log(fromTokenState);
+        console.log(toTokenState);
 
-   }
+        if (address == "") {
+          walletConnect();
+          alert("Please connect your wallet");
+          return;
+        }
+        const tx =
+          await axios.get(`https://api.1inch.io/v5.0/42161/swap?fromTokenAddress=${fromTokenState}&toTokenAddress=${toTokenState}&amount=${value}&fromAddress=${address}&slippage=1
+    `);
+        setTo(tx.data.tx.to);
+        setTxData(tx.data.tx.data);
+        setValueEXchangedDecimals(Number(`1E${tx.data.toToken.decimals}`));
+        setValueExchanged(tx.data.toTokenAmount);
+        console.log(tx.data);
+      } else {
+        setValueExchanged("select a token to convert from and to convert to");
+      }
+    } catch (err: any) {
+      if (err.response.data.description == "Internal Server Error") {
+        setValueExchanged(" ");
+      } else {
+        setValueExchanged(err.response.data.description);
+        console.log(valueExchanged);
+      }
+    }
   }
 
   async function walletConnect() {
@@ -163,6 +193,7 @@ function Home({ apikey }: PROPS) {
   }
 
   useEffect(() => {
+  
     if (typeof window.ethereum !== "undefined") {
       window.ethereum.on("accountsChanged", (accounts: string[]) => {
         if (accounts.length === 0) {
@@ -173,8 +204,12 @@ function Home({ apikey }: PROPS) {
       });
       window.ethereum.on("chainChanged", () => {
         router.reload();
-      }),
-        [];
+      });
+     
+      
+        [valueExchanged];
+    }else{
+      return
     }
 
     async function init() {
@@ -209,27 +244,48 @@ function Home({ apikey }: PROPS) {
               className={hm.input}
               placeholder="Enter Amount"
               onChange={changeValue}
-              maxLength={5}
+              onKeyUp={getInchSwap}
+              maxLength={6}
             />
             {false ? <button>Max</button> : <></>}{" "}
             <button id="from" onClick={open_close}>
               ChooseToken
             </button>
           </div>
-          <p style={balanceStypeProp}>balance: {fromTokenState == '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'? fromBalance:''}</p>
+          {/* <p style={balanceStypeProp}>
+            balance:{" "}
+            {fromTokenState == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+              ? fromBalance
+              : ""}
+          </p> */}
           <div>
-            <input type="text" className={hm.input} value={
-              !valueExchanged?"":
-              (parseFloat(valueExchanged)/valueExchangedDecimals).toFixed(4)
-            } readOnly />
+            <input
+              type="text"
+              className={hm.input}
+              value={
+                !valueExchanged
+                  ? ""
+                  : (
+                      parseFloat(valueExchanged) / valueExchangedDecimals
+                    ).toFixed(4) == "NaN"
+                  ? valueExchanged
+                  : (
+                      parseFloat(valueExchanged) / valueExchangedDecimals
+                    ).toFixed(4)
+              }
+              readOnly
+            />
             {false ? <button>Max</button> : <></>}
             <button id="to" onClick={open_close}>
               ChooseToken
             </button>
           </div>
           {address != "" ? (
-            errorObjectTemplate.errorID == 0 ? (
-              <button onClick={getInchSwap}>Swap</button>
+            errorObjectTemplate.errorID == 0 ? (parseFloat(valueExchanged) / valueExchangedDecimals).toFixed(4) == "NaN"?
+            (
+              <button disabled>Swap</button>
+            ):(
+              <button onClick={confirmSwap}>Swap</button>
             ) : (
               <button>{errorObjectTemplate.reason}</button>
             )
@@ -254,7 +310,6 @@ function Home({ apikey }: PROPS) {
       ) : (
         <></>
       )}
-      
     </RootLayout>
   );
 }
