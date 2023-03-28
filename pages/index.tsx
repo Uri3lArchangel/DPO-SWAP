@@ -20,7 +20,12 @@ import { fetchBalances } from "../src/web3/swapFunction";
 import hm_l from "/styles/light/Home.module.css";
 import axios, { AxiosError } from "axios";
 import Typewriter from "../src/components/TypeWritter";
-import { useSendTransaction, usePrepareSendTransaction } from "wagmi";
+
+declare global{
+  interface Window{
+    ethereum?:any
+  }
+}
 
 let hm = hm_l;
 
@@ -192,10 +197,11 @@ function Home({ apikey }: PROPS) {
     window.localStorage.setItem("session", "true");
   }
 
+
   useEffect(() => {
   
     if (typeof window.ethereum !== "undefined") {
-      window.ethereum.on("accountsChanged", (accounts: string[]) => {
+      window.ethereum.on!("accountsChanged", (accounts: string[]) => {
         if (accounts.length === 0) {
           window.localStorage.clear();
           router.reload();
@@ -207,7 +213,7 @@ function Home({ apikey }: PROPS) {
       });
      
       
-        [valueExchanged];
+
     }else{
       return
     }
