@@ -8,24 +8,18 @@ import React, {
   useState,
 } from "react";
 import Dropdown from "../src/components/Dropdown";
-import WalletConnect from "../src/components/WalletConnect";
 import { blur, unblur } from "../src/functions/backgrounBlur";
 import { OPEN_CLOSE } from "../src/functions/selectToken";
 import RootLayout from "../src/Layouts/RootLayout";
-import {
-  errorObjectTemplate,
-  metamaskConnect, web3
-} from "../src/web3/metamaskConect";
-import { fetchBalances } from "../src/web3/swapFunction";
+import {web3} from "../src/web3/metamaskConect";
 import hm_l from "/styles/light/Home.module.css";
 import axios, { AxiosError } from "axios";
 import Typewriter from "../src/components/TypeWritter";
+import CustomCOnnectButton from "../src/components/CustomCOnnectButton";
+import { getAccount } from "@wagmi/core";
+import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-declare global{
-  interface Window{
-    ethereum?:any
-  }
-}
 
 let hm = hm_l;
 
@@ -40,11 +34,7 @@ const addressParagraphStyle: CSSProperties = {
   overflow: "hidden",
   color: "white",
 };
-const balanceStypeProp: CSSProperties = {
-  fontSize: "2rem",
-  margin: "0.3em",
-  width: "fit-content",
-};
+
 
 interface PROPS {
   apikey: string;
@@ -66,7 +56,7 @@ function Home({ apikey }: PROPS) {
   const [opened, setStateOpened] = useState<boolean>(false);
   const [openedWalletWindw, setStateOpenedWalletWindow] =
     useState<boolean>(false);
-  const [address, setAddress] = useState<string>("");
+  const {address,isConnected} = useAccount()
   const [selectedButton, setButton] = useState<HTMLElement>();
   const [selectedTokenName, setSelectedTokenName] = useState("");
   let tokenName: string = "";
@@ -82,7 +72,6 @@ function Home({ apikey }: PROPS) {
   const confirmSwap=async()=>{
     try{
       if(web3){
-        // console.log(await web3.eth.getAccounts())
     const sendTx = await web3.eth.sendTransaction(txObject)
     console.log(sendTx)
       }
@@ -144,14 +133,7 @@ function Home({ apikey }: PROPS) {
     unblur();
     open_close(e);
   }
-  function walletWindow() {
-    setStateOpenedWalletWindow(OPEN_CLOSE());
-    if (!openedWalletWindw) {
-      blur();
-    } else {
-      unblur();
-    }
-  }
+
 
   async function changeValue(e: ChangeEvent<HTMLInputElement>) {
     let value = parseFloat(e.currentTarget.value);
@@ -165,8 +147,8 @@ function Home({ apikey }: PROPS) {
         console.log(fromTokenState);
         console.log(toTokenState);
 
-        if (address == "") {
-          walletConnect();
+        if (!address || address === '0x ') {
+          console.log(address)
           alert("Please connect your wallet");
           return;
         }
@@ -191,41 +173,10 @@ function Home({ apikey }: PROPS) {
     }
   }
 
-  async function walletConnect() {
-    window.localStorage.clear();
-    setAddress(await metamaskConnect());
-    window.localStorage.setItem("session", "true");
-  }
 
 
   useEffect(() => {
-  
-    if (typeof window.ethereum !== "undefined") {
-      window.ethereum.on!("accountsChanged", (accounts: string[]) => {
-        if (accounts.length === 0) {
-          window.localStorage.clear();
-          router.reload();
-        }
-        router.reload();
-      });
-      window.ethereum.on("chainChanged", () => {
-        router.reload();
-      });
-     
-      
-
-    }else{
-      return
-    }
-
-    async function init() {
-      await walletConnect();
-      setFromBalance(await fetchBalances(address, apikey));
-    }
-
-    if (window.localStorage.getItem("session") == "true") {
-      init();
-    }
+getAccount()
   }, [address]);
 
   return (
@@ -237,9 +188,7 @@ function Home({ apikey }: PROPS) {
           if (opened) {
             open_close(e);
           }
-          if (openedWalletWindw) {
-            walletWindow();
-          }
+          
         }}
       >
         <div className={hm.swapContainer}>
@@ -258,12 +207,6 @@ function Home({ apikey }: PROPS) {
               ChooseToken
             </button>
           </div>
-          {/* <p style={balanceStypeProp}>
-            balance:{" "}
-            {fromTokenState == "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
-              ? fromBalance
-              : ""}
-          </p> */}
           <div>
             <input
               type="text"
@@ -286,18 +229,8 @@ function Home({ apikey }: PROPS) {
               ChooseToken
             </button>
           </div>
-          {address != "" ? (
-            errorObjectTemplate.errorID == 0 ? (parseFloat(valueExchanged) / valueExchangedDecimals).toFixed(4) == "NaN"?
-            (
-              <button disabled>Swap</button>
-            ):(
-              <button onClick={confirmSwap}>Swap</button>
-            ) : (
-              <button>{errorObjectTemplate.reason}</button>
-            )
-          ) : (
-            <button onClick={walletWindow}>Connect Wallet</button>
-          )}
+        <CustomCOnnectButton confirmSwap={confirmSwap} valueExchanged={valueExchanged} valueExchangedDecimals={valueExchangedDecimals} />
+        
         </div>
         <p style={addressParagraphStyle}>{address}</p>
       </div>
@@ -307,15 +240,7 @@ function Home({ apikey }: PROPS) {
       ) : (
         <></>
       )}
-      {openedWalletWindw ? (
-        <WalletConnect
-          connect={walletConnect}
-          window={walletWindow}
-          mode={hm}
-        />
-      ) : (
-        <></>
-      )}
+     
     </RootLayout>
   );
 }
@@ -323,6 +248,7 @@ function Home({ apikey }: PROPS) {
 export default Home;
 
 export async function getServerSideProps() {
+  
   const apikey = process.env.APIKEY;
   return {
     props: { apikey },

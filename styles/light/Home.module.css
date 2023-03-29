@@ -201,7 +201,6 @@
   border-radius: 0.5rem;
   font-size: 1.7rem;
   height: 70%;
-  /* width: fit-content; */
   padding: 0 0.9em;
   box-shadow: 1px 1px 6px #00000055;
   cursor: pointer;
@@ -229,7 +228,7 @@
   border: 1px solid #00ff00;
 
 
-}.swapContainer > button:hover{
+}.swapContainer > main  button:hover{
 background-color: transparent;
 color: #00ff00;
 border: 1px solid #00ff00;
@@ -311,40 +310,6 @@ border: 1px solid #00ff00;
   border-radius: 1rem;
   background-image: linear-gradient(to bottom,green,cyan);
   color: white;
-}
-.walletConnectContainer{
-  position: absolute;
-  top: 20%;
-  width: fit-content;
-  left: 0;
-  right: 0;
-  margin: auto;
-  background-color: white;
-  height: fit-content;
-  padding: 2em;
-  border-radius: 1em;
-  box-shadow: 1px 1px 4px #00000022;
-
- 
-}
-.walletConnectContainer ul{
-  display: flex;
-  list-style: none;
- justify-content: space-around;
-  align-items: baseline;
-}
-.walletConnectContainer li{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin: 1em;
-  padding: 1em;
-  font-size: 2rem;
-  border-radius: 1rem;
-  cursor: pointer;
-}
-.walletConnectContainer li:hover{
-box-shadow: 1px 1px 5px #00000040;
 }
 
 .footer{
@@ -431,7 +396,7 @@ animation-timing-function: ease-out;
   }.swapContainer h1{
     margin-bottom: 0;
     
-  }.swapContainer > button{
+  }.swapContainer > main button{
     font-size: 1.4rem;
     width: 100%;
   }.dropDown{

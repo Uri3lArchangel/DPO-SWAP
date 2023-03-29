@@ -29,7 +29,7 @@ const checkProvider=()=>{
         errorObjectTemplate.solution = 'Pease install metamask'
         errorObjectTemplate.state='Failed'
     }else{
-        web3=new Web3(window.ethereum)
+        web3=new Web3(Web3.givenProvider)
     }
 }
 
