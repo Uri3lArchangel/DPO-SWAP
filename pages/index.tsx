@@ -19,6 +19,8 @@ import CustomCOnnectButton from "../src/components/CustomCOnnectButton";
 import { getAccount } from "@wagmi/core";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 
 
 let hm = hm_l;
@@ -194,7 +196,9 @@ getAccount()
         <div className={hm.swapContainer}>
           <Typewriter text="DPO SWAP" />
           <div>
+            <label htmlFor="input1"></label>
             <input
+              id="input1"
               type="text"
               className={hm.input}
               placeholder="Enter Amount"
@@ -208,7 +212,9 @@ getAccount()
             </button>
           </div>
           <div>
+            <label htmlFor="input2Disabled"></label>
             <input
+              id="input2Disabled"
               type="text"
               className={hm.input}
               value={
@@ -246,9 +252,15 @@ getAccount()
 }
 
 export default Home;
+interface ServerObj{
+  req:NextApiRequest,
+  res:NextApiResponse
+}
 
-export async function getServerSideProps() {
-  
+export async function getServerSideProps({req,res}:ServerObj) {
+  if(req.url == 'https://swap.directprivatepffers/assets/*'){
+  res.redirect('https://swap.directprivateoffers.com/404')
+ }
   const apikey = process.env.APIKEY;
   return {
     props: { apikey },
