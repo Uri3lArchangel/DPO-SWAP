@@ -10,11 +10,17 @@ function RootLayout({children}) {
   return (
     <>
      <Head>
-        <title>Busd to Busd2</title>
+        <title>Direct Private Offers | Decentralized Swap Exchange</title>
+        <meta name="description" content="A Decentralized Swap Exchange of the DPO (Direct Private Offers) Security token, the main domain is at https://directprivateoffers.com, with a list of transaction receipts off the blockchain at https://receipts.directprivateoffers.com" />
+        <meta name="description" content="DEX SWAP EXCHANGE WEB3 BLOCKCHAIN DPO ARBITRIUM SECURITY TOKEN " />
         <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/assets/handshake.png" />
+        <link rel="canonical" href="https://swap.directprivateoffers.com" />
     </Head>
+    <TopBar mode={hm} />
     <main>{children}</main>
+    <Footer mode={hm} />
     </>
   )
 }

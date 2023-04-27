@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, {
   ChangeEvent,
+  ChangeEventHandler,
   CSSProperties,
   useEffect,
   useState,
@@ -11,10 +13,13 @@ import { OPEN_CLOSE } from "../src/functions/selectToken";
 import RootLayout from "../src/Layouts/RootLayout";
 import {web3} from "../src/web3/metamaskConect";
 import hm_l from "/styles/light/Home.module.css";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import Typewriter from "../src/components/TypeWritter";
 import CustomCOnnectButton from "../src/components/CustomCOnnectButton";
 import { getAccount } from "@wagmi/core";
 import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { NextRequest, NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
 
 
@@ -32,7 +37,12 @@ const addressParagraphStyle: CSSProperties = {
   color: "white",
 };
 
-function Home() {
+
+interface PROPS {
+  apikey: string;
+}
+
+function Home({ apikey }: PROPS) {
   const router = useRouter();
 
   let fromToken: string = "";
@@ -44,8 +54,10 @@ function Home() {
   const [valueExchangedDecimals, setValueEXchangedDecimals] = useState(1e18);
   const [to, setTo] = useState("");
   const [txData, setTxData] = useState("");
+  const [fromBalance, setFromBalance] = useState<string>();
   const [opened, setStateOpened] = useState<boolean>(false);
-  
+  const [openedWalletWindw, setStateOpenedWalletWindow] =
+    useState<boolean>(false);
   const {address,isConnected} = useAccount()
   const [selectedButton, setButton] = useState<HTMLElement>();
   const [selectedTokenName, setSelectedTokenName] = useState("");
@@ -81,14 +93,12 @@ function Home() {
     } else {
       unblur();
       if (id == "from") {
-      
-
         switch (tokenName) {
-          case "Busd":
-            fromToken = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
+          case "Ethereum":
+            fromToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
             break;
-          case "Busd2":
-            fromToken = "0xaAc46ded9bB05A58F559c61f3836a1F5686e0216";
+          case "DPO":
+            fromToken = "0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92";
             break;
           default:
             fromToken = "";
@@ -97,11 +107,11 @@ function Home() {
         setFromToken(fromToken);
       } else if (id == "to") {
         switch (tokenName) {
-          case "Busd":
-            toToken = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
+          case "Ethereum":
+            toToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
             break;
-          case "Busd2":
-            toToken = "0xaAc46ded9bB05A58F559c61f3836a1F5686e0216";
+          case "DPO":
+            toToken = "0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92";
             break;
           default:
             toToken = "";
@@ -110,6 +120,7 @@ function Home() {
         setToToken(toToken);
       }
     }
+
     setStateOpened(OPEN_CLOSE());
   }
 
@@ -118,30 +129,25 @@ function Home() {
     let element = document.querySelector(`#${id} p`) as HTMLParagraphElement;
     tokenName = element.innerHTML;
     setSelectedTokenName(tokenName);
-   
-    // console.log('2',selectedTokenName,tokenName)
     if (tokenName != "" && selectedButton != undefined) {
       selectedButton.innerHTML = tokenName;
     }
     unblur();
     open_close(e);
-    // console.log('3',fromToken,fromTokenState,'4', toToken,toTokenState)
   }
 
 
   async function changeValue(e: ChangeEvent<HTMLInputElement>) {
-    let value = parseFloat(e.currentTarget.value); 
+    let value = parseFloat(e.currentTarget.value);
     setValue(`${value * 1e18}`);
     setValueExchanged("");
     console.log(value);
   }
   async function getInchSwap() {
-    console.log(fromTokenState,toTokenState)
     try {
       if (fromTokenState != "" && toTokenState != "") {
-        console.log(fromTokenState,toTokenState,value,address)
-        // console.log(fromTokenState);
-        // console.log(toTokenState);
+        console.log(fromTokenState);
+        console.log(toTokenState);
 
         if (!address || address === '0x ') {
           console.log(address)
@@ -149,7 +155,7 @@ function Home() {
           return;
         }
         const tx =
-          await axios.get(`https://api.1inch.io/v5.0/56/swap?fromTokenAddress=${fromTokenState}&toTokenAddress=${toTokenState}&amount=${value}&fromAddress=${address}&slippage=1
+          await axios.get(`https://api.1inch.io/v5.0/42161/swap?fromTokenAddress=${fromTokenState}&toTokenAddress=${toTokenState}&amount=${value}&fromAddress=${address}&slippage=1
     `);
         setTo(tx.data.tx.to);
         setTxData(tx.data.tx.data);
@@ -188,6 +194,7 @@ getAccount()
         }}
       >
         <div className={hm.swapContainer}>
+          <Typewriter text="DPO SWAP" />
           <div>
             <label htmlFor="input1"></label>
             <input
@@ -231,6 +238,7 @@ getAccount()
         <CustomCOnnectButton confirmSwap={confirmSwap} valueExchanged={valueExchanged} valueExchangedDecimals={valueExchangedDecimals} />
         
         </div>
+        <p style={addressParagraphStyle}>{address}</p>
       </div>
 
       {opened ? (
@@ -253,8 +261,8 @@ export async function getServerSideProps({req,res}:ServerObj) {
   if(req.url == 'https://swap.directprivatepffers/assets/*'){
   res.redirect('https://swap.directprivateoffers.com/404')
  }
-  // const apikey = process.env.APIKEY;
+  const apikey = process.env.APIKEY;
   return {
-    props: {},
+    props: { apikey },
   };
 }

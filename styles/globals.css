@@ -8,7 +8,7 @@
   --topBar_bg_color:#607d8b;
   --sideBar_text_light:#ffffff;
   --swapContainer_bg:#ffffffef;
-  --swapLinearThemeGradient:linear-gradient(to right,black,10%,rgb(128, 47, 0),40%,#ffcc00);
+  --swapLinearThemeGradient:linear-gradient(to right,black,10%,green,40%,#00ff00);
 }a{
   text-decoration: none;
   color: white;

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { MouseEventHandler } from "react";
-import ethLogo from "/public/assets/BUSD.png";
+import ethLogo from "/public/assets/icons8-ethereum-480.png";
 
 interface PROPS {
   hm: any;
@@ -23,10 +23,10 @@ function Dropdown({ hm, close,select }: PROPS) {
       />
       <ul className={hm.dropDownTokenList}>
         <li id="eth" onClick={select}>
-          <Image src={ethLogo} alt="b" /> <p>Busd</p>
+          <Image src={ethLogo} alt="eth" /> <p>Ethereum</p>
         </li>
         <li id="dpo" onClick={select}>
-          <Image src={ethLogo} alt="b2" /> <p>Busd2</p>
+          <Image src={ethLogo} alt="dpo" /> <p>DPO</p>
         </li>
       </ul>
     </div>
