@@ -1,88 +1,7 @@
 /*Animation keyframes*/
 
-@keyframes spin {
-  from {
-    transform: rotateZ(0deg);
-  }
-  to {
-    transform: rotateZ(360deg);
-  }
-}
-@keyframes loadAnim {
-  0%{
-    left: -70%;
-    height: 0;
-    opacity: 0;
-    border-left: 1px solid #00ff0055;
-  }25%,75%{
-    left: 8%;
-    height: 0;
-    opacity: 1;
-    border-left: 1px solid #00ff0055;
-  }75%,90%{
-    height: 600px;
-    left: 8%;
-    opacity: 1;
 
-  }90%,100%{
-    border-left: 1px solid #00ff00;
-    height: 600px;
-    left: 8%;
-    opacity: 1;
 
-  }
-}
-@keyframes loadAnimResp1 {
-  0%{
-    left: -70%;
-    height: 0;
-    opacity: 0;
-    border-left: 1px solid #00ff0055;
-  }25%,75%{
-    left:0%;
-    height: 0;
-    opacity: 1;
-    border-left: 1px solid #00ff0055;
-  }75%,90%{
-    height: 400px;
-    left: 0%;
-    opacity: 1;
-
-  }90%,100%{
-    border-left: 1px solid #00ff00;
-    height: 400px;
-    left: 0%;
-    opacity: 1;
-
-  }
-}
-@keyframes footerAnimIntro {
-  from{
-      bottom: -10%;
-      opacity: 0;
-  }to{
-    bottom: 8%;
-    opacity: 1;
-  }
-}
-@keyframes footerButtonAnimIntro {
-  0%{
-    transform: translateY(0);
-
-  }25%{
-    transform: translateY(1px);
-
-  }50%{
-    transform: translateY(0);
-
-  }75%{
-    transform: translateY(-1px);
-
-  }100%{
-    transform: translateY(0%);
-
-  }
-}
 /*Top Bar*/
 
 .topBar {
@@ -97,12 +16,12 @@
   margin: auto;
   width: 100%;
   cursor: pointer;
-  padding: 1.5em 0;
+  padding: 0.2em 0;
   background-color: var(--topBar_bg_color);
 }
 
 .topContainer h1 {
-  font-size: 18px;
+  font-size: 1.4em;
   line-height: 20px;
   text-align: center;
   font-weight: 100;
@@ -129,15 +48,16 @@
   height: 100%;
 }.imageContainer{
   width: fit-content;
+  
   margin: auto;
 }
 /*Main content*/
 
 .main {
   overflow-x: hidden;
-  position: absolute;
+  overflow-y: scroll;
   width: 100%;
-  height: 100%;
+  /* min-height: 100%; */
   background-size: 50% 100%;
   background-repeat: no-repeat;
   background-position-y: center;
@@ -147,28 +67,17 @@
   background-image: url(../../public/assets/alt4.png);
 }
 /*Swap Container*/
-.swapContainer {
-  position: absolute;
-  top: 20%;
-  left: -70%;
-  height: 0;
-  border-left: 1px solid #00ff0055;
-  width: fit-content;
-  padding: 0 0 0 10em  ;
-  opacity: 0;
-  color: white;
-  animation-name: loadAnim;
-  animation-duration: 2s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
+.fromSwapContainer,.toSwapContainer{
+border-bottom: 1px solid #0003;
+
+}.toSwapContainer{
+  padding: 2em 0;
 }
 
-.swapContainer h1 {
-  font-size: 6rem;
+.Container h1 {
+  font-size: 4rem;
   font-family: girlfriend;
   font-weight: 500;
-  margin-bottom: 2em;
   color: transparent;
   text-shadow: 1px 1px 3px #00000055;
   border: 2px solid black;
@@ -183,71 +92,68 @@
   -webkit-background-clip: text;
   border-radius: 0.5rem;
 }
-.swapContainer > div {
-  background-color: #eeeeee;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 70px;
-  border-radius: 0.5rem;
-  min-width: 100px;
-  width: 500px;
-  max-width: 650px;
-  margin: 1.8em 0;
-  padding: 0 1em;
+.swapContainer{
+  background-color: white;
+  padding: 1.5em 1.4em 0.5em 1.4em;
+  margin: 5em auto;
 }
-.swapContainer > div button {
-  background-color: #00ff00;
-  border-radius: 0.5rem;
-  font-size: 1.7rem;
-  height: 70%;
-  padding: 0 0.9em;
-  box-shadow: 1px 1px 6px #00000055;
-  cursor: pointer;
-  margin: 0;
-}
-.swapContainer input {
-  border: none;
-  background-color: transparent;
-  height: 100%;
-  outline: 0;
-  font-size: 2rem;
+.swapContainer  input{
+width: 75%;
+height: 40px;
+margin-right: 0.8em;
+outline: 0;
+font-size: 1.6rem;
+margin: 0 0 0.4em 0;
+font-weight: 700;
 
 }
-
-.swapContainer button {
-  border: 0;
-  background-color: #00ff00;
-  border-radius: 1rem;
-  cursor: pointer;
-  width: 40%;
-  padding: 0.7em 0;
-  font-size: 2rem;
-  margin-top: 2em;
-  transition: all 0.2s linear;
-  border: 1px solid #00ff00;
-
-
-}.swapContainer > main  button:hover{
-background-color: transparent;
-color: #00ff00;
-border: 1px solid #00ff00;
+.fromSwapContainer > div{
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin: 1.5em auto;
+}
+ .SwapButton {
+background-color: #00ff0022;
+border: 0;
+border-radius: 20px;
+display: flex;
+align-items: center;
+padding: 0.2em 0.5em;
+}
+.SwapButton img{
+  width: 30px;
+  height: 30px;
 }
 /*Dropdown token list*/
+.connectButtonContainer button{
+  margin: 0 0.4em;
+  background-color: #00ff00;
+  padding: 0.8em 1.2em;
+  border: 1px solid #00ff00;
+  font-size: 1.5rem;
+  border-radius: 15px;
+  transition-duration: 0.3s;
+}
+.connectButtonContainer button:hover{
+  background-color: transparent;
+  border: 1px solid #00ff00;
+}
+.connectButtonContainer button:disabled{
+  background-color: #00ff0044;
+}
 .dropDown {
+  box-shadow: 2px 2px 10px #0003;
   position: absolute;
   top: 20%;
-  width: 27%;
+  width: 100%;
   left: 0;
   right: 0;
   margin: auto;
   z-index: 6;
-  height: fit-content;
+  height: 400px;
   background-color: white;
-  border-top:1px solid #00ff00 ;
-  border-left:1px solid #00ff00 ;
-  border-right:1px solid cyan ;
-  border-bottom:1px solid cyan ;
+
   padding: 2.5em 3em;
   border-radius: 1em;
 }
@@ -274,7 +180,7 @@ border: 1px solid #00ff00;
   border: 1px solid #00ff00;
 }
 .dropDownTokenList img {
-  width: 50px;
+  width: 40px;
   height: 40px;
   margin: 0em 0.3em;
   user-select: none;
@@ -289,12 +195,11 @@ border: 1px solid #00ff00;
 .dropDown > input {
   width: 100%;
   height: 40px;
-  font-size: 2em;
+  font-size: 1.5em;
   padding: 0 0.7em;
-  border: 1px solid #00ff00;
+  border: 1px solid #000;
   border-radius: 1rem;
   margin: 0.6em 0;
-  background-color: #00000016;
   outline: 0;
 }
 .dropDown hr {
@@ -308,33 +213,28 @@ border: 1px solid #00ff00;
   width: fit-content;
   padding: 0em 0.4em;
   border-radius: 1rem;
-  background-image: linear-gradient(to bottom,green,cyan);
-  color: white;
+  color: black;
+  border: 1px solid black;
 }
 
 .footer{
-bottom: 8%;
-position:absolute;
-background-color: #fff;
-max-width: 600px;
-min-width: 30%;
-left: 0;
-right: 0;
-margin: auto;
-display: flex;
-height: 40px;
-justify-content: space-around;
-align-items: center;
-border-radius: 2em;
-animation-name: footerAnimIntro;
-animation-duration: 1s;
-animation-iteration-count: 1;
-animation-timing-function: ease-out;
 
-}.footer button{
-  height: 80%;
+background-color: #fff;
+max-width: 700px;
+min-width: 30%;
+padding: 1em 0;
+margin: auto;
+display: grid;
+row-gap: 5px;
+border-radius: 2em;
+
+
+}
+.footer button{
+  height: 30px;
   padding: 0 1em;
   font-weight: bolder;
+  font-size: 1.4rem;
   border-radius: 1em;
   border: 0;
   background-color: red;
@@ -342,141 +242,39 @@ animation-timing-function: ease-out;
   cursor: pointer;
 
 }
-.footer button:hover{
-  animation-name: footerButtonAnimIntro;
-  animation-iteration-count: infinite;
-  animation-duration: 1.2s;
-  animation-timing-function: ease-in;
 
-}
-@media screen and (max-width:1024px) {
-  .dropDown{
-    width: 44%;
-  }
-}
-
-@media screen and (max-width:716px) {
-  .topContainer{
-    padding: 0.3em 0;
-  }
-  .swapContainer{
-    width: 100%;
-    top: 21%;
-    margin: 0 3em;
-    padding: 0 5em;
-    animation-name: loadAnimResp1;
-    animation-duration: 2s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    animation-timing-function: ease-out;
-  }
-}
-@media screen and (max-width:600px) {
+@media screen and (min-width:640px) {
   .main{
-    background-size: 104% 100%;
-  }
- .swapContainer input{
-    background-color: white;
-    width: 90%;
-    border-radius: 0.5rem;
-    margin: 0.5em 0;
-    height: 50px;
-    padding: 0 0.4em;
-  }
-  .swapContainer > div{
-   background-color: transparent;
-   display: block;
-   width: 100%;
-   margin:1em 0 7.5em 0 ;
-  }
-  .swapContainer > div button{
-    display: block;
-    width: 90%;
-    font-size: 1.4rem;
-  }.swapContainer h1{
-    margin-bottom: 0;
-    
-  }.swapContainer > main button{
-    font-size: 1.4rem;
-    width: 100%;
-  }.dropDown{
-    width: 70%;
-
-  }.dropDown input{
-    font-size: 1.3rem;
-  }
-  .walletConnectContainer{
-    padding: 1.5em;
-  }.footer{
-    width: fit-content;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    height: fit-content;
-  }.footer button{
-    padding: 0.7em ;
-    margin: 0.3em;
-  }
-}
-@media screen and (max-width:420px) {
-.imageContainer{
-    height: 25px;
-    margin: auto;
-    width: 80%;
-  }.imageContainer img{
-    width: 90%;
-    margin: auto;
-    display: block;
-    height: 100%;
-  }
-  .topContainer h1{
-    font-size: 1.5rem;
+    min-height: 100vh;
   }
   .swapContainer{
-    padding: 0 2em;
-    margin: 0 1em;
-  }
-  .swapContainer > div{
-    margin:0.7em 0 4.5em 0;
-  }
-  .swapContainer input{
-    height: 40px;
-
-  }
-  .swapContainer h1{
-    font-size: 2.7rem;
-  }  .swapContainer > div button{
-    font-size: 1rem;
-    height:37px;
-  }
-  .swapContainer  button{
-    padding: 0.7em;
-  }
- 
-  .dropDown{
-    width: 100%;
-    padding: 1.5em 0.9em;
-    height: 370px;
-    border-radius: 0;
-   
-  }
-  .dropDown input{
-    font-size: 1rem;
-  }.walletConnectContainer{
-    height: fit-content;
+    width: 75%;
+    border-radius: 10px;
+    font-size: 16px;
     padding: 2em 1.4em;
-  }.walletConnectContainer li{
-    padding: 0.5em;
-    margin: 0.5em;
+  }
+  .dropDown{
+    width: 80%;
+  }
+  .Container h1{
+    font-size: 5rem;
+    margin-top: 0.5em;
   }
   .footer{
-    flex-wrap: wrap;
-    flex: 1;
-    justify-content: space-evenly;
-    height: fit-content;
+    grid-template-columns: 1fr 1fr 2fr 2fr;
+    column-gap: 9px;
   }
   .footer button{
-    padding:  0.9em 0.6em;
-    margin: 0.6em 0.4em;
-    font-size: 1rem;
+    width: 100%;
+    /* margin: auto; */
+  }.swapContainer  input{
+  font-size: 1.8rem;
+  font-weight: 700;
+  }
+}
+
+@media screen and (min-width:1280px) {
+  .swapContainer{
+  width: 40%;
   }
 }

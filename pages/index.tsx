@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { HiChevronDown } from "react-icons/hi2";
 import React, {
   ChangeEvent,
   ChangeEventHandler,
@@ -11,7 +12,7 @@ import Dropdown from "../src/components/Dropdown";
 import { blur, unblur } from "../src/functions/backgrounBlur";
 import { OPEN_CLOSE } from "../src/functions/selectToken";
 import RootLayout from "../src/Layouts/RootLayout";
-import {web3} from "../src/web3/metamaskConect";
+import { web3 } from "../src/web3/metamaskConect";
 import hm_l from "/styles/light/Home.module.css";
 import axios, { AxiosError } from "axios";
 import Typewriter from "../src/components/TypeWritter";
@@ -21,10 +22,9 @@ import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { NextRequest, NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
-
+import { tokensData } from "../src/core/tokenData";
 
 let hm = hm_l;
-
 
 const addressParagraphStyle: CSSProperties = {
   position: "absolute",
@@ -36,7 +36,6 @@ const addressParagraphStyle: CSSProperties = {
   overflow: "hidden",
   color: "white",
 };
-
 
 interface PROPS {
   apikey: string;
@@ -58,32 +57,31 @@ function Home({ apikey }: PROPS) {
   const [opened, setStateOpened] = useState<boolean>(false);
   const [openedWalletWindw, setStateOpenedWalletWindow] =
     useState<boolean>(false);
-  const {address,isConnected} = useAccount()
+  const { address, isConnected } = useAccount();
   const [selectedButton, setButton] = useState<HTMLElement>();
   const [selectedTokenName, setSelectedTokenName] = useState("");
   let tokenName: string = "";
   const [id, setId] = useState("");
+const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.png")
+  const txObject = {
+    from: address,
+    to: to,
+    value: String(value),
+    data: String(txData),
+  };
 
-  const txObject={
-    from:address,
-    to:to,
-    value:String(value),
-    data:String(txData),
-  }
-
-  const confirmSwap=async()=>{
-    try{
-      if(web3){
-    const sendTx = await web3.eth.sendTransaction(txObject)
-    console.log(sendTx)
+  const confirmSwap = async () => {
+    try {
+      if (web3) {
+        const sendTx = await web3.eth.sendTransaction(txObject);
+        console.log(sendTx);
+      } else {
+        return;
       }
-      else{
-        return
-      }
-  }catch(err:any){
-    alert(err.message)
-  }
-  }
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
 
   function open_close(e: React.MouseEvent<HTMLElement>) {
     if (!opened) {
@@ -92,32 +90,16 @@ function Home({ apikey }: PROPS) {
       blur();
     } else {
       unblur();
-      if (id == "from") {
-        switch (tokenName) {
-          case "Ethereum":
-            fromToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-            break;
-          case "DPO":
-            fromToken = "0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92";
-            break;
-          default:
-            fromToken = "";
-            break;
+      if (tokenName) {
+        if (id == "from") {
+          fromToken = tokensData[tokenName].address;
+          setFromToken(fromToken);
+          setFromTokenImage(tokensData[tokenName].logo)
+
+        } else if (id == "to") {
+          toToken = tokensData[tokenName].address;
+          setToToken(toToken);
         }
-        setFromToken(fromToken);
-      } else if (id == "to") {
-        switch (tokenName) {
-          case "Ethereum":
-            toToken = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
-            break;
-          case "DPO":
-            toToken = "0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92";
-            break;
-          default:
-            toToken = "";
-            break;
-        }
-        setToToken(toToken);
       }
     }
 
@@ -130,12 +112,11 @@ function Home({ apikey }: PROPS) {
     tokenName = element.innerHTML;
     setSelectedTokenName(tokenName);
     if (tokenName != "" && selectedButton != undefined) {
-      selectedButton.innerHTML = tokenName;
+      document.querySelector(`#${selectedButton.id} p`)!.innerHTML = tokensData[tokenName].symbol;
     }
     unblur();
     open_close(e);
   }
-
 
   async function changeValue(e: ChangeEvent<HTMLInputElement>) {
     let value = parseFloat(e.currentTarget.value);
@@ -149,8 +130,8 @@ function Home({ apikey }: PROPS) {
         console.log(fromTokenState);
         console.log(toTokenState);
 
-        if (!address || address === '0x ') {
-          console.log(address)
+        if (!address || address === "0x ") {
+          console.log(address);
           alert("Please connect your wallet");
           return;
         }
@@ -175,92 +156,145 @@ function Home({ apikey }: PROPS) {
     }
   }
 
-
-
   useEffect(() => {
-getAccount()
-  }, [address]);
+    getAccount();
+  }, [address,fromTokenImage]); 
 
   return (
     <RootLayout>
-      <div
+      <article
         id="main"
         className={hm.main}
         onClick={(e) => {
           if (opened) {
             open_close(e);
           }
-          
         }}
       >
-        <div className={hm.swapContainer}>
+        <div className={hm.Container}>
           <Typewriter text="DPO SWAP" />
-          <div>
-            <label htmlFor="input1"></label>
-            <input
-              id="input1"
-              type="text"
-              className={hm.input}
-              placeholder="Enter Amount"
-              onChange={changeValue}
-              onKeyUp={getInchSwap}
-              maxLength={6}
-            />
-            {false ? <button>Max</button> : <></>}{" "}
-            <button id="from" onClick={open_close}>
-              ChooseToken
-            </button>
+          <section className={hm.swapContainer}>
+            <section className={hm.fromSwapContainer}>
+              <div>
+                <button
+                  id="from"
+                  className={hm.SwapButton}
+                  onClick={open_close} 
+                >
+                  <Image  
+                    src={fromTokenImage}
+                    width="240"
+                    decoding="sync"
+                    height="240"
+                    alt="logo"
+                  />
+                  <p className="mx-2 text-2xl">ETH</p>
+                  <HiChevronDown className="mx-1" size={15} />
+                </button>
+
+                <div className="">
+                  <p className="text-right text-lg text-gray-500 md:text-2xl">
+                    Balance: 100
+                  </p>
+                  <div className="flex justify-between ">
+                    <button className="bg-gray-200 px-4 py-2 rounded-full text-xl mr-1 md:text-2xl md:px-8 md:py-3 ">
+                      Max
+                    </button>
+                    <select className="bg-gray-200 px-2 py-1 cursor-pointer outline-none rounded-full text-xl ml-1 md:text-2xl md:px-8 md:py-3">
+                      <option value="1">Slippage: 1%</option>
+                      <option  value="5">Slippage: 5%</option>
+                      <option  value="7">Slippage: 7%</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <label htmlFor="input1"></label>
+              <div className="flex justify-between items-center">
+              <input
+                id="input1"
+                type="text"
+                className={hm.input}
+                placeholder="Enter Amount"
+                onChange={changeValue}
+                onKeyUp={getInchSwap}
+                maxLength={6}
+              />
+              <span className="text-gray-600 text-xl">$100</span>
+              </div>
+            </section>
+
+            <section className={hm.toSwapContainer}>
+              <button
+                id="to"
+                onClick={open_close}
+                className={hm.SwapButton}
+              >
+                <Image
+                  src={
+                    "https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png"
+                  }
+                  width="240"
+                  height="240"
+                  alt="logo"
+                />
+                <p className="mx-2 text-2xl">USDT</p>
+                <HiChevronDown className="mx-1" size={15} />
+              </button>
+              <label htmlFor="input2Disabled"></label>
+              <div className="flex justify-between items-center">
+                <input
+                  id="input2Disabled"
+                  type="text"
+                  placeholder="Amount to Receive"
+                  className={hm.input}
+                  value={
+                    !valueExchanged
+                      ? ""
+                      : (
+                          parseFloat(valueExchanged) / valueExchangedDecimals
+                        ).toFixed(4) == "NaN"
+                      ? valueExchanged
+                      : (
+                          parseFloat(valueExchanged) / valueExchangedDecimals
+                        ).toFixed(4)
+                  }
+                  readOnly
+                />
+                <span className="text-gray-600 text-xl">$100</span>
+              </div>
+            </section>
+            <div className={"my-3 "+hm.connectButtonContainer}>
+            <CustomCOnnectButton
+            confirmSwap={confirmSwap}
+            valueExchanged={valueExchanged}
+            valueExchangedDecimals={valueExchangedDecimals}
+          />
           </div>
-          <div>
-            <label htmlFor="input2Disabled"></label>
-            <input
-              id="input2Disabled"
-              type="text"
-              className={hm.input}
-              value={
-                !valueExchanged
-                  ? ""
-                  : (
-                      parseFloat(valueExchanged) / valueExchangedDecimals
-                    ).toFixed(4) == "NaN"
-                  ? valueExchanged
-                  : (
-                      parseFloat(valueExchanged) / valueExchangedDecimals
-                    ).toFixed(4)
-              }
-              readOnly
-            />
-            {false ? <button>Max</button> : <></>}
-            <button id="to" onClick={open_close}>
-              ChooseToken
-            </button>
-          </div>
-        <CustomCOnnectButton confirmSwap={confirmSwap} valueExchanged={valueExchanged} valueExchangedDecimals={valueExchangedDecimals} />
+          </section>
         
         </div>
-        <p style={addressParagraphStyle}>{address}</p>
-      </div>
+       
+      </article>
 
       {opened ? (
         <Dropdown select={selectTokenItem} close={open_close} hm={hm} />
       ) : (
         <></>
       )}
-     
     </RootLayout>
   );
 }
 
 export default Home;
-interface ServerObj{
-  req:NextApiRequest,
-  res:NextApiResponse
+interface ServerObj {
+  req: NextApiRequest;
+  res: NextApiResponse;
 }
 
-export async function getServerSideProps({req,res}:ServerObj) {
-  if(req.url == 'https://swap.directprivatepffers/assets/*'){
-  res.redirect('https://swap.directprivateoffers.com/404')
- }
+export async function getServerSideProps({ req, res }: ServerObj) {
+  if (req.url == "https://swap.directprivatepffers/assets/*") {
+    res.redirect("https://swap.directprivateoffers.com/404");
+  }
   const apikey = process.env.APIKEY;
   return {
     props: { apikey },
