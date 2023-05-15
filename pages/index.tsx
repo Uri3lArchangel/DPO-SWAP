@@ -6,8 +6,10 @@ import React, {
   ChangeEventHandler,
   CSSProperties,
   useEffect,
+  useRef,
   useState,
 } from "react";
+import { message } from "antd";
 import Dropdown from "../src/components/Dropdown";
 import { blur, unblur } from "../src/functions/backgrounBlur";
 import { OPEN_CLOSE } from "../src/functions/selectToken";
@@ -19,10 +21,11 @@ import Typewriter from "../src/components/TypeWritter";
 import CustomCOnnectButton from "../src/components/CustomCOnnectButton";
 import { getAccount } from "@wagmi/core";
 import { useAccount } from "wagmi";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { NextRequest, NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { tokensData } from "../src/core/tokenData";
+import { RTB } from "../src/web3/returnTokenBalance";
+import { priceFetch } from "../src/web3/getPrice";
 
 let hm = hm_l;
 
@@ -44,25 +47,69 @@ interface PROPS {
 function Home({ apikey }: PROPS) {
   const router = useRouter();
 
+  // variables and states that hold the token addresses of selected tokens
   let fromToken: string = "";
-  const [fromTokenState, setFromToken] = useState<string>("");
+  const [fromTokenState, setFromToken] = useState<string>(
+    "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+  );
   let toToken: string = "";
-  const [toTokenState, setToToken] = useState("");
+  const [toTokenState, setToToken] = useState(
+    "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9"
+  );
+
+  // value passed into from token input field
   const [value, setValue] = useState<string>();
+
+  // value converted
   const [valueExchanged, setValueExchanged] = useState<string>("");
+
+  // token decimals, hardcoded now
   const [valueExchangedDecimals, setValueEXchangedDecimals] = useState(1e18);
+
+  // 1inch aggregator address
   const [to, setTo] = useState("");
+
+  // transaction data to be sent to the blockchain
   const [txData, setTxData] = useState("");
-  const [fromBalance, setFromBalance] = useState<string>();
+
+  // balance of from token
+  const [fromBalance, setFromBalance] = useState<number>(0);
+
+  // state check to see if token select window is opened or not
   const [opened, setStateOpened] = useState<boolean>(false);
-  const [openedWalletWindw, setStateOpenedWalletWindow] =
-    useState<boolean>(false);
+
+  // address of current user connected
   const { address, isConnected } = useAccount();
+
+  // the from or to button clicked on
   const [selectedButton, setButton] = useState<HTMLElement>();
-  const [selectedTokenName, setSelectedTokenName] = useState("");
+
+  // the name of the token selected
   let tokenName: string = "";
+
+  // id of from or to button selected
   const [id, setId] = useState("");
-const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.png")
+
+  // image of currently selected token
+  const [fromTokenImage, setFromTokenImage] = useState(
+    "https://tokens.1inch.io/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.png"
+  );
+  const [toTokenImage, setToTokenImage] = useState(
+    "https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png"
+  );
+
+  // amount of slippage
+  const [slippageValue, setSlippageValue] = useState<number>(1);
+
+  const [fromPrice, setFromPrice] = useState("");
+
+  const [toPrice, setToPrice] = useState("");
+
+  const slippageRef = useRef<HTMLSelectElement>(null);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  //transaction message for swap
   const txObject = {
     from: address,
     to: to,
@@ -94,10 +141,10 @@ const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xe
         if (id == "from") {
           fromToken = tokensData[tokenName].address;
           setFromToken(fromToken);
-          setFromTokenImage(tokensData[tokenName].logo)
-
+          setFromTokenImage(tokensData[tokenName].logo);
         } else if (id == "to") {
           toToken = tokensData[tokenName].address;
+          setToTokenImage(tokensData[tokenName].logo);
           setToToken(toToken);
         }
       }
@@ -110,9 +157,10 @@ const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xe
     let id = e.currentTarget.id;
     let element = document.querySelector(`#${id} p`) as HTMLParagraphElement;
     tokenName = element.innerHTML;
-    setSelectedTokenName(tokenName);
+    // setSelectedTokenName(tokenName);
     if (tokenName != "" && selectedButton != undefined) {
-      document.querySelector(`#${selectedButton.id} p`)!.innerHTML = tokensData[tokenName].symbol;
+      document.querySelector(`#${selectedButton.id} p`)!.innerHTML =
+        tokensData[tokenName].symbol;
     }
     unblur();
     open_close(e);
@@ -124,20 +172,29 @@ const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xe
     setValueExchanged("");
     console.log(value);
   }
+  const max = async () => {
+    (document.getElementById("input1") as HTMLInputElement).value =
+      String(fromBalance);
+    await getInchSwap();
+  };
   async function getInchSwap() {
     try {
+      setSlippage();
       if (fromTokenState != "" && toTokenState != "") {
-        console.log(fromTokenState);
-        console.log(toTokenState);
-
         if (!address || address === "0x ") {
           console.log(address);
           alert("Please connect your wallet");
           return;
+        } else if (!slippageValue || slippageValue < 1 || slippageValue > 50) {
+          messageApi.error("Slippage error", 5);
+          setTimeout(() => {
+            messageApi.destroy();
+          });
         }
-        const tx =
-          await axios.get(`https://api.1inch.io/v5.0/42161/swap?fromTokenAddress=${fromTokenState}&toTokenAddress=${toTokenState}&amount=${value}&fromAddress=${address}&slippage=1
-    `);
+        console.log("slippageValue", slippageValue);
+        const tx = await axios.get(
+          `https://api.1inch.io/v5.0/42161/swap?fromTokenAddress=${fromTokenState}&toTokenAddress=${toTokenState}&amount=${value}&fromAddress=${address}&slippage=${slippageValue}`
+        );
         setTo(tx.data.tx.to);
         setTxData(tx.data.tx.data);
         setValueEXchangedDecimals(Number(`1E${tx.data.toToken.decimals}`));
@@ -155,13 +212,35 @@ const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xe
       }
     }
   }
+  const setSlippage = () => {
+    if (slippageRef.current) {
+      setSlippageValue(parseInt(slippageRef.current?.value));
+    }
 
+  };
   useEffect(() => {
-    getAccount();
-  }, [address,fromTokenImage]); 
+    const init = async () => {
+      RTB(apikey, address!);
+      if (fromTokenState) {
+        setFromPrice(
+          String(
+            (await priceFetch(apikey, fromTokenState))?.usdPrice?.toFixed(2)
+          )
+        );
+      }
+      if (toTokenState) {
+        setToPrice(
+          String((await priceFetch(apikey, toTokenState))?.usdPrice?.toFixed(2))
+        );
+      }
+      getAccount();
+    };
+    init();
+  }, [address, fromTokenImage, fromTokenState, toTokenState]);
 
   return (
     <RootLayout>
+      {contextHolder}
       <article
         id="main"
         className={hm.main}
@@ -179,9 +258,9 @@ const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xe
                 <button
                   id="from"
                   className={hm.SwapButton}
-                  onClick={open_close} 
+                  onClick={open_close}
                 >
-                  <Image  
+                  <Image
                     src={fromTokenImage}
                     width="240"
                     decoding="sync"
@@ -194,49 +273,47 @@ const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xe
 
                 <div className="">
                   <p className="text-right text-lg text-gray-500 md:text-2xl">
-                    Balance: 100
+                    Balance: 0
                   </p>
                   <div className="flex justify-between ">
-                    <button className="bg-gray-200 px-4 py-2 rounded-full text-xl mr-1 md:text-2xl md:px-8 md:py-3 ">
+                    <button
+                      onClick={max}
+                      className="bg-gray-200 px-4 py-2 rounded-full text-xl mr-1 md:text-2xl md:px-8 md:py-3 "
+                    >
                       Max
                     </button>
-                    <select className="bg-gray-200 px-2 py-1 cursor-pointer outline-none rounded-full text-xl ml-1 md:text-2xl md:px-8 md:py-3">
-                      <option value="1">Slippage: 1%</option>
-                      <option  value="5">Slippage: 5%</option>
-                      <option  value="7">Slippage: 7%</option>
+                    <select
+                      id="slippage"
+                      ref={slippageRef}
+                      className="bg-gray-200 px-2 py-1 cursor-pointer outline-none rounded-full text-xl ml-1 md:text-2xl md:px-8 md:py-3"
+                    >
+                      <option value="1">Slippage: 2%</option>
+                      <option value="5">Slippage: 10%</option>
+                      <option value="25">Slippage: 50%</option>
+                      <option value="35">Slippage: 70%</option>
+                      <option value="50">Slippage: 100%</option>
                     </select>
                   </div>
                 </div>
               </div>
               <label htmlFor="input1"></label>
               <div className="flex justify-between items-center">
-              <input
-                id="input1"
-                type="text"
-                className={hm.input}
-                placeholder="Enter Amount"
-                onChange={changeValue}
-                onKeyUp={getInchSwap}
-                maxLength={6}
-              />
-              <span className="text-gray-600 text-xl">$100</span>
+                <input
+                  id="input1"
+                  type="text"
+                  className={hm.input}
+                  placeholder="Enter Amount"
+                  onChange={changeValue}
+                  onKeyUp={getInchSwap}
+                  maxLength={6}
+                />
+                <span className="text-gray-600 text-xl">${fromPrice}</span>
               </div>
             </section>
 
             <section className={hm.toSwapContainer}>
-              <button
-                id="to"
-                onClick={open_close}
-                className={hm.SwapButton}
-              >
-                <Image
-                  src={
-                    "https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png"
-                  }
-                  width="240"
-                  height="240"
-                  alt="logo"
-                />
+              <button id="to" onClick={open_close} className={hm.SwapButton}>
+                <Image src={toTokenImage} width="240" height="240" alt="logo" />
                 <p className="mx-2 text-2xl">USDT</p>
                 <HiChevronDown className="mx-1" size={15} />
               </button>
@@ -260,20 +337,18 @@ const [fromTokenImage,setFromTokenImage] = useState("https://tokens.1inch.io/0xe
                   }
                   readOnly
                 />
-                <span className="text-gray-600 text-xl">$100</span>
+                <span className="text-gray-600 text-xl">${toPrice}</span>
               </div>
             </section>
-            <div className={"my-3 "+hm.connectButtonContainer}>
-            <CustomCOnnectButton
-            confirmSwap={confirmSwap}
-            valueExchanged={valueExchanged}
-            valueExchangedDecimals={valueExchangedDecimals}
-          />
-          </div>
+            <div className={"my-3 " + hm.connectButtonContainer}>
+              <CustomCOnnectButton
+                confirmSwap={confirmSwap}
+                valueExchanged={valueExchanged}
+                valueExchangedDecimals={valueExchangedDecimals}
+              />
+            </div>
           </section>
-        
         </div>
-       
       </article>
 
       {opened ? (

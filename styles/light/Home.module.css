@@ -97,8 +97,8 @@ border-bottom: 1px solid #0003;
   padding: 1.5em 1.4em 0.5em 1.4em;
   margin: 5em auto;
 }
-.swapContainer  input{
-width: 75%;
+.swapContainer  input[type='text']{
+width: 70%;
 height: 40px;
 margin-right: 0.8em;
 outline: 0;
