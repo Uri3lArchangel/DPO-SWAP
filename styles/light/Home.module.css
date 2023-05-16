@@ -254,7 +254,7 @@ border-radius: 2em;
     padding: 2em 1.4em;
   }
   .dropDown{
-    width: 80%;
+    width: 60%;
   }
   .Container h1{
     font-size: 5rem;
@@ -276,5 +276,8 @@ border-radius: 2em;
 @media screen and (min-width:1280px) {
   .swapContainer{
   width: 40%;
+  }
+  .dropDown{
+    width: 30%;
   }
 }
