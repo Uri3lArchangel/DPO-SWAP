@@ -1,7 +1,9 @@
+import dpologo from '../../public/assets/dpo coin-01.png'
+
 interface MyObject {
     [key: string]: {
       symbol: string;
-      logo: string;
+      logo: any;
       address: string;
       decimals: number;
     };
@@ -10,13 +12,13 @@ interface MyObject {
 interface MyObjectArray {
     name:string,
     symbol: string,
-    logo: string,
+    logo: any,
     address: string,
     decimals: number,
 }
 
 export const tokensData:MyObject= {
-    Ethereum: {
+    "Ethereum": {
       symbol: "ETH",
       logo: "https://tokens.1inch.io/0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.png",
       address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -24,7 +26,7 @@ export const tokensData:MyObject= {
     },
     "Direct Private Offers":{
         symbol:"DPO",
-        logo:"",
+        logo:"https://i.imgur.com/HKQCJfX.png",
         address:"0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92",
         decimals:18
     },
@@ -103,7 +105,7 @@ export const tokensDataArry:MyObjectArray[]= [
     {
         name:"Direct Private Offers",
         symbol:"DPO",
-        logo:"",
+        logo:"https://i.imgur.com/HKQCJfX.png",
         address:"0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92",
         decimals:18
     },

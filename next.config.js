@@ -2,7 +2,8 @@
 const nextConfig = {
   images:{
     domains:[
-      "tokens.1inch.io"
+      "tokens.1inch.io",
+      "i.imgur.com"
     ]
   },
   reactStrictMode: true,

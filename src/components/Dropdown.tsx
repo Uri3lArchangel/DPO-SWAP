@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React, { MouseEventHandler } from "react";
 import { tokensData, tokensDataArry } from "../core/tokenData";
-import ethLogo from "/public/assets/icons8-ethereum-480.png";
+import dpologo from '../../public/assets/dpo coin-01.png'
 
 interface PROPS {
   hm: any;
@@ -24,7 +24,7 @@ function Dropdown({ hm, close,select }: PROPS) {
       />
       <ul className={hm.dropDownTokenList}>
         {tokensDataArry.map((item,index)=>(<li key={index} id={item.symbol} onClick={select}>
-          <Image src={item.logo} width="120" height="120" alt="eth" /> <p>{item.name}</p>
+          <Image src={item.logo} width="120" height="120" alt={item.symbol}  /> <p>{item.name}</p>
         </li>))}
       </ul>
     </div>
