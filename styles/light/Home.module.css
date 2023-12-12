@@ -21,7 +21,7 @@
 }
 
 .topContainer h1 {
-  font-size: 1.4em;
+  font-size: 1.7em;
   line-height: 20px;
   text-align: center;
   font-weight: 100;
@@ -39,8 +39,6 @@
 .lowerContainer span {
   font-size: 2rem;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  display: block;
-  text-align: center;
 }
 
 .logoImage {
