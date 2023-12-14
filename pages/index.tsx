@@ -26,6 +26,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { tokensData } from "../src/core/tokenData";
 import { RTB } from "../src/web3/returnTokenBalance";
 import { priceFetch } from "../src/web3/getPrice";
+import Note from "../src/components/Note";
+import HomeFiat from "../src/components/HomeFiat";
 
 let hm = hm_l;
 
@@ -42,9 +44,10 @@ const addressParagraphStyle: CSSProperties = {
 
 interface PROPS {
   apikey: string;
+  clientID:string
 }
 
-function Home({ apikey }: PROPS) {
+function Home({ apikey,clientID }: PROPS) {
   const router = useRouter();
 
   // variables and states that hold the token addresses of selected tokens
@@ -239,6 +242,7 @@ function Home({ apikey }: PROPS) {
   }, [address, fromTokenImage, fromTokenState, toTokenState]);
 
   return (
+    <>
     <RootLayout>
       {contextHolder}
       <article
@@ -357,10 +361,15 @@ function Home({ apikey }: PROPS) {
         <></>
       )}
     </RootLayout>
+    <Note>
+      <HomeFiat clientID={clientID} />
+    </Note>
+    </>
   );
 }
 
 export default Home;
+
 interface ServerObj {
   req: NextApiRequest;
   res: NextApiResponse;
@@ -371,7 +380,8 @@ export async function getServerSideProps({ req, res }: ServerObj) {
     res.redirect("https://swap.directprivateoffers.com/404");
   }
   const apikey = process.env.APIKEY;
+  const clientID=process.env.CLIENTID
   return {
-    props: { apikey },
+    props: { apikey,clientID },
   };
 }
