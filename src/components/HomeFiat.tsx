@@ -126,7 +126,7 @@ function HomeFiat({ clientID }: { clientID: string }) {
           Buy <span className="text-green-400">DPOI</span> tokens via fiat
           portal
         </h1>
-        <h2 className="text-md my-4 text-2xl">One DPOI Token is $870.00 CAD</h2>
+        <h2 className="text-md my-4 text-2xl">DPO Global LLC: Tokens Available Here</h2>
       </header>
       <main>
         <form className="w-[90%] mx-auto  sm:w-[60%] lg:w-[40%]">
