@@ -127,6 +127,7 @@ function HomeFiat({ clientID }: { clientID: string }) {
           portal
         </h1>
         <h2 className="text-md my-4 text-2xl">DPO Global LLC: Tokens Available Here</h2>
+        <p>Price: $40 USD per token, less 13% discount to market = $34.82</p>
       </header>
       <main>
         <form className="w-[90%] mx-auto  sm:w-[60%] lg:w-[40%]">
