@@ -6,13 +6,14 @@ function TopBar({mode}:any) {
   return (
     <div className={mode.topBar}>
       <div className={mode.topContainer}>
-        <h1 >DPO Global LLC </h1>
+        <h1 > </h1>
       </div>
       <div className={mode.lowerContainer}>
         <div className={mode.imageContainer}>
         </div>
-        <div style={{color:"green",fontSize:"2rem",fontWeight:"bolder",textAlign:"center"}}> DIRECT  <span style={{color:"black"}}> PRIVATE</span> OFFERS INCORPORATED</div>
-        <p style={{textAlign:"center",fontSize:"1.6rem"}}>FINTRAC # M23796196</p>
+        {/* DIRECT  <span style={{color:"black"}}> PRIVATE</span> OFFERS INCORPORATED */}
+        <div style={{color:"green",fontSize:"2rem",fontWeight:"bolder",textAlign:"center"}}>DPO Global LLC</div>
+        <p style={{textAlign:"center",fontSize:"1.6rem"}}></p>
       </div>
     </div>
   )

@@ -123,7 +123,7 @@ function HomeFiat({ clientID }: { clientID: string }) {
     <section className="bg-white min-h-[100vh] pt-20">
       <header className="text-center text-black py-2">
         <h1 className="text-4xl font-bold">
-          Buy <span className="text-green-400">DPOI</span> tokens via fiat
+          Buy <span className="text-green-400">DPO</span> tokens via fiat
           portal
         </h1>
         <h2 className="text-md my-4 text-2xl">DPO Global LLC: Tokens Available Here</h2>
