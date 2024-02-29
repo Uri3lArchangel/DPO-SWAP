@@ -28,7 +28,7 @@ import { RTB } from "../src/web3/returnTokenBalance";
 import { priceFetch } from "../src/web3/getPrice";
 import Note from "../src/components/Note";
 import HomeFiat from "../src/components/HomeFiat";
-
+import Link from 'next/link";
 let hm = hm_l;
 
 const addressParagraphStyle: CSSProperties = {
