@@ -30,6 +30,7 @@ export const tokensData:MyObject= {
         address:"0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92",
         decimals:18
     },
+    
     "Tether USD": {
       symbol: "USDT",
       logo: "https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
