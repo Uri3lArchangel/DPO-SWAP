@@ -24,12 +24,12 @@ export const tokensData:MyObject= {
       address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
       decimals: 18,
     },
-    // "Direct Private Offers":{
-    //     symbol:"DPO",
-    //     logo:"https://i.imgur.com/HKQCJfX.png",
-    //     address:"0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92",
-    //     decimals:18
-    // },
+    "Direct Private Offers":{
+        symbol:"DPOSVG",
+        logo:"https://i.imgur.com/HKQCJfX.png",
+        address:"0x7dA687932b7B436A2297161a12F0d0C9B69aF3fe",
+        decimals:18
+    },
     "Tether USD": {
       symbol: "USDT",
       logo: "https://tokens.1inch.io/0xdac17f958d2ee523a2206206994597c13d831ec7.png",
