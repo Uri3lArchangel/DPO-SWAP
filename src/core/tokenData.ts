@@ -25,9 +25,9 @@ export const tokensData:MyObject= {
       decimals: 18,
     },
     "Direct Private Offers":{
-        symbol:"DPOSVG",
+        symbol:"DPO",
         logo:"https://i.imgur.com/HKQCJfX.png",
-        address:"0x7dA687932b7B436A2297161a12F0d0C9B69aF3fe",
+        address:"0x73ea12A934a9A08614D165DB30F87BdfD1A2Cb92",
         decimals:18
     },
     "Tether USD": {
