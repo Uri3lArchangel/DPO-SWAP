@@ -144,7 +144,7 @@ function HomeFiat({ clientID }: { clientID: string }) {
             ref={walletRef}
             className="w-[90%] text-xl text-black placeholder:text-black/90 mx-auto block bg-transparent border border-green-300 rounded-md px-4 h-16 outline-none my-4"
             id=""
-            placeholder="Enter receipient address"
+            placeholder="Enter recipient address"
           />
           <input
             type="text"

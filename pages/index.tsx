@@ -362,12 +362,17 @@ function Home({ apikey,clientID }: PROPS) {
       )}
     </RootLayout>
     <Note>
+    <h1 className="text-4xl font-bold">
+          Buy <span className="text-green-400">DPO</span> tokens via fiat
+        </h1>
+        <p>Price: $40 CAD per token, less 13% discount to market = $34.82 CAD</p>
+
+      <HomeFiat clientID={clientID} />
       <div className="w-fit mx-auto space-y-6 py-4">
      <h1 className="text-4xl font-bold">
           Buy <span className="text-green-400">DPO</span> tokens using crypto
         </h1>
         <h2 className="text-md my-4 text-2xl">DPO Global LLC: Tokens Available Here</h2>
-        <p>Price: $40 USD per token, less 13% discount to market = $34.82</p>
       <Link className="px-4 py-2 bg-blue-500 text-xl text-white py-2 block mx-auto" href="https://nowpayments.io/payment/?iid=4425132678">Buy DPO via crypto</Link>
     </div></Note>
     </>
