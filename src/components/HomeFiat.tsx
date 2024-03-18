@@ -127,7 +127,7 @@ function HomeFiat({ clientID }: { clientID: string }) {
           portal
         </h1>
         <h2 className="text-md my-4 text-2xl">DPO Global LLC: Tokens Available Here</h2>
-        <p>Price: $40 CAD per token, less 13% discount to market = $34.82</p>
+        <p>Price: $40 USD per Token, less 13% discount to market = $34.82 USD</p>
       </header>
       <main>
         <form className="w-[90%] mx-auto  sm:w-[60%] lg:w-[40%]">
@@ -135,7 +135,7 @@ function HomeFiat({ clientID }: { clientID: string }) {
             type="text"
             ref={amountRef}
             className="w-[90%] text-xl text-black placeholder:text-black/90 mx-auto block bg-transparent border border-green-300 rounded-md px-4 h-16 outline-none my-4"
-            placeholder="Enter the amount of tokens"
+            placeholder="Amount?"
             onChange={change}
           />
           <input
@@ -144,13 +144,13 @@ function HomeFiat({ clientID }: { clientID: string }) {
             ref={walletRef}
             className="w-[90%] text-xl text-black placeholder:text-black/90 mx-auto block bg-transparent border border-green-300 rounded-md px-4 h-16 outline-none my-4"
             id=""
-            placeholder="Enter recipient address"
+            placeholder="Address?"
           />
           <input
             type="text"
             value={total+ ' CAD'}
             className="w-[90%] text-xl text-black placeholder:text-black/90 mx-auto block bg-white/40 border cursor-not-allowed border-green-300 rounded-md px-4 h-16 outline-none my-4 "
-            placeholder="Total in CAD"
+            placeholder="Total"
             disabled
           />
           <PaypalCustomProvider clientID={clientID} currency={"CAD"}>

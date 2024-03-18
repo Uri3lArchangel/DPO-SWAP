@@ -255,7 +255,7 @@ function Home({ apikey,clientID }: PROPS) {
         }}
       >
         <div className={hm.Container}>
-          <Typewriter text="LAYER II Decentralized Blockchain Ecosystem for Issuance of Digital Asset Securities_" />
+          <Typewriter text="L2 DECENTRALISED BLOCKCHAIN ECOSYSTEM FOR THE ISSUANCE OF DIGITAL ASSET SECURITES" />
           <section className={hm.swapContainer}>
             <section className={hm.fromSwapContainer}>
               <div>
