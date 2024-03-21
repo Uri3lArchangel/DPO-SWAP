@@ -366,10 +366,10 @@ function Home({ apikey,clientID }: PROPS) {
       <HomeFiat clientID={clientID} />
       <div className="w-fit mx-auto space-y-6 py-4">
      <h1 className="text-4xl font-bold">
-          Buy <span className="text-green-400">DPO</span> tokens using crypto
+          Buy <span className="text-green-400">DPO</span> Tokens via Crypto Portal
         </h1>
         <h2 className="text-md my-4 text-2xl">DPO Global LLC: Tokens Available Here</h2>
-      <Link className="px-4 py-2 bg-blue-500 text-xl text-white py-2 block mx-auto" href="https://nowpayments.io/payment/?iid=4425132678">Buy DPO via crypto</Link>
+      <Link className="px-4 py-2 bg-red-500 text-xl text-white py-2 block mx-auto" href="https://nowpayments.io/payment/?iid=4425132678">Buy DPO Tokens via Crypto Portal</Link>
     </div></Note>
     </>
   );
